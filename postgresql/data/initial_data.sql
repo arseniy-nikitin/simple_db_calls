@@ -1,4 +1,4 @@
-INSERT INTO hello_schema.users(name, count)
-VALUES ('user-from-initial_data.sql', 42)
-ON CONFLICT (name)
+INSERT INTO xd_schema.rofls(razryvnaya)
+VALUES ('POCHEMU PROD UPAL?! Lead eto ROFLS')
+ON CONFLICT (razryvnaya)
 DO NOTHING;

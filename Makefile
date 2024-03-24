@@ -73,7 +73,7 @@ format:
 
 # Internal hidden targets that are used only in docker environment
 --in-docker-start-debug --in-docker-start-release: --in-docker-start-%: install-%
-	psql 'postgresql://user:password@service-postgres:5432/simple_db_calls_db-1' -f ./postgresql/data/initial_data.sql
+	psql 'postgresql://user:password@service-postgres:5432/simple_db_calls_db' -f ./postgresql/data/initial_data.sql
 	/home/user/.local/bin/simple_db_calls \
 		--config /home/user/.local/etc/simple_db_calls/static_config.yaml \
 		--config_vars /home/user/.local/etc/simple_db_calls/config_vars.docker.yaml

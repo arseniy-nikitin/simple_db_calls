@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package rofls.api;
+
+message Rofl {
+	int32 id = 1;
+	string razryvnaya = 2;
+}
+
+service RoflsService {
+	rpc CreateRofl(CreateRoflRequest) returns(CreateRoflResponse) {}
+	rpc GetRofl(GetRoflRequest) returns(GetRoflResponse) {}
+	rpc UpdateRofl(UpdateRoflRequest) returns(google.protobuf.Empty) {}
+	rpc DeleteRofl(DeleteRoflRequest) returns(google.protobuf.Empty) {}
+
+}
+
+message CreateRoflRequest {
+	string razryvnaya = 1;
+}
+
+message CreateRoflResponse {
+	int32 id = 1;
+}
+
+message GetRoflRequest {
+	int32 id = 1;
+}
+
+message GetRoflResponse {
+	Rofl rofl = 1;
+}
+
+message UpdateRoflRequest {
+	Rofl rofl = 1;
+}
+
+message DeleteRoflRequest {
+	int32 id = 1;
+}
