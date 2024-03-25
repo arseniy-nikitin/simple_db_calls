@@ -13,6 +13,8 @@ namespace simple_db_calls {
 
 class Workers final : public workers::api::WorkersServiceBase::Component {
  public:
+  static constexpr std::string_view kName = "handler-workers";
+
   static constexpr std::size_t kMaxStringLength = 55;
 
   Workers(const userver::components::ComponentConfig& config,

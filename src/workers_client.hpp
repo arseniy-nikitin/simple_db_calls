@@ -12,6 +12,8 @@ namespace simple_db_calls {
 
 class WorkersClient final : public userver::components::LoggableComponentBase {
  public:
+  static constexpr std::string_view kName = "workers-client";
+
   WorkersClient(const userver::components::ComponentConfig& config,
               const userver::components::ComponentContext& component_context)
       : userver::components::LoggableComponentBase(config, component_context),
