@@ -3,6 +3,6 @@ DROP SCHEMA IF EXISTS workers_schema CASCADE;
 CREATE SCHEMA IF NOT EXISTS workers_schema;
 
 CREATE TABLE IF NOT EXISTS workers_schema.workers (
-	id SERIAL PRIMATY KEY,
+	id SERIAL PRIMARY KEY,
 	position VARCHAR(55) NOT NULL
 );
