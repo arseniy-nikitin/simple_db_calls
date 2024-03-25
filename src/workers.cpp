@@ -51,7 +51,7 @@ void Workers::GetWorker(workers::api::WorkersServiceBase::GetWorkerCall& call,
   worker.set_id(id);
   worker.set_position(position);
 
-  workers::api::DeleteWorkerResponse response;
+  workers::api::GetWorkerResponse response;
   *response.mutable_worker() = worker;
   call.Finish(response);
 }
