@@ -16,7 +16,6 @@ int main(int argc, char* argv[]) {
           .Append<userver::ugrpc::server::ServerComponent>()
           .Append<userver::ugrpc::client::ClientFactoryComponent>()
           .Append<userver::server::handlers::Ping>()
-          .Append<userver::components::TestsuiteSupport>()
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
 
