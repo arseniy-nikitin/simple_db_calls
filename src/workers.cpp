@@ -1,11 +1,40 @@
-#include "workerss.hpp"
-#include "workers_queries.hpp"
+#include "workers.hpp"
 
 #include <fmt/format.h>
 
 #include <userver/clients/dns/component.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/utils/assert.hpp>
+
+namespace {
+  
+  const storages::postgres::Query kCreateWorkerQuery {
+      "INSERT INTO workers_schema.workers(position) VALUES($1)"
+      "ON CONFLICT (position)"
+      "DO NOTHING"
+      "RETURNING workers.id",
+      storages::postgres::Query::Name{"create_worker_query"}};
+
+  const storages::postgres::Query kGetWorkerQuery {
+      "SELECT *"
+      "FROM workers_schema.workers"
+      "WHERE workers.id = $1",
+      storages::postgres::Query::Name{"get_worker_query"}};
+
+  const storages::postgres::Query kUpdateWorkerQuery {
+      "UPDATE workers_schema.workers"
+      "SET workers.position = $1"
+      "WHERE workers.id = $2"
+      "RETURNING workers.id",
+      storages::postgres::Query::Name{"update_worker_query"}};
+
+  const storages::postgres::Query kDeleteWorkerQuery {
+      "DELETE FROM workers_schema.workers"
+      "WHERE workers.id = $1"
+      "RETURNING *",
+      storages::postgres::Query::Name{"delete_worker_query"}};
+
+}  // namespace
 
 namespace simple_db_calls {
 
@@ -27,7 +56,7 @@ void Workers::CreateWorker(workers::api::WorkersServiceBase::CreateWorkerCall& c
   }
 
   int id = result.AsSingleRow<int>();
-  workers::api::WorkersResponse response;
+  workers::api::CreateWorkerResponse response;
   response.set_id(id);
   call.Finish(response);
 }
@@ -53,7 +82,7 @@ void Workers::GetWorker(workers::api::WorkersServiceBase::GetWorkerCall& call,
   worker.set_id(worker_id);
   worker.set_position(position);
 
-  workers::api::WorkersResponse response;
+  workers::api::GetWorkerResponse response;
   *response.mutable_worker() = worker;
   call.Finish(response);
 }
@@ -77,7 +106,7 @@ void Workers::UpdateWorker(workers::api::WorkersServiceBase::UpdateWorkerCall& c
     call.FinishWithError(status);
   }
 
-  workers::api::WorkersResponse response;
+  workers::api::UpdateWorkerResponse response;
   response.set_id(id);
   call.Finish(response);
 }
@@ -103,7 +132,7 @@ void Workers::DeleteWorker(workers::api::WorkersServiceBase::DeleteWorkerCall& c
   worker.set_id(worker_id);
   worker.set_position(position);
 
-  workers::api::WorkersResponse response;
+  workers::api::DeleteWorkerResponse response;
   *response.mutable_worker() = worker;
   call.Finish(response);
 }
