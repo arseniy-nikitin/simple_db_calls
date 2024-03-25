@@ -37,7 +37,7 @@ workers::api::Worker WorkersClient::GetWorker(int32_t id) {
 }
 
 int32_t WorkersClient::UpdateWorker(workers::api::Worker worker) {
-  workers::api::CreateWorkerRequest request;
+  workers::api::UpdateWorkerRequest request;
   *request.mutable_worker() = worker;
 
   auto context = std::make_unique<grpc::ClientContext>();                                                                                                                            
