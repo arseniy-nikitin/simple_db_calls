@@ -1,4 +1,5 @@
 #include "workers.hpp"
+#include "workers_queries.hpp"
 
 #include <fmt/format.h>
 
