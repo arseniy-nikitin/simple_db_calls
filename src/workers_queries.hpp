@@ -13,7 +13,7 @@ namespace simple_db_calls {
       userver::storages::postgres::Query::Name{"create_worker_query"}};
 
   const userver::storages::postgres::Query kGetWorkerQuery {
-      "SELECT *"
+      "SELECT workers.position"
       "FROM workers_schema.workers"
       "WHERE workers.id = $1",
       userver::storages::postgres::Query::Name{"get_worker_query"}};
@@ -28,7 +28,7 @@ namespace simple_db_calls {
   const userver::storages::postgres::Query kDeleteWorkerQuery {
       "DELETE FROM workers_schema.workers"
       "WHERE workers.id = $1"
-      "RETURNING *",
+      "RETURNING workers.position",
       userver::storages::postgres::Query::Name{"delete_worker_query"}};
 
 }  // namespace simple_db_calls

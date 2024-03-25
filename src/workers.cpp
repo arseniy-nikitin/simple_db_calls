@@ -21,7 +21,7 @@ void Workers::CreateWorker(workers::api::WorkersServiceBase::CreateWorkerCall& c
       userver::storages::postgres::ClusterHostType::kMaster,
       kCreateWorkerQuery,
       position);
-  if (result.empty()) {
+  if (result.IsEmpty()) {
     grpc::Status status(grpc::StatusCode::INVALID_ARGUMENT, "Error while creating worker");
     call.FinishWithError(status);
   }
@@ -40,20 +40,18 @@ void Workers::GetWorker(workers::api::WorkersServiceBase::GetWorkerCall& call,
       userver::storages::postgres::ClusterHostType::kMaster,
       kGetWorkerQuery,
       id);
-  if (result.empty()) {
+  if (result.IsEmpty()) {
     grpc::Status status(grpc::StatusCode::INVALID_ARGUMENT, "Error while getting worker");
     call.FinishWithError(status);
   }
 
-  const auto& row = result.rows().front();
-  int worker_id = row["id"].As<int>();
-  std::string position = row["position"].As<std::string>();
+  std::string position = result.AsSingleRow<std::string>();;
 
   workers::api::Worker worker;
-  worker.set_id(worker_id);
+  worker.set_id(id);
   worker.set_position(position);
 
-  workers::api::GetWorkerResponse response;
+  workers::api::DeleteWorkerResponse response;
   *response.mutable_worker() = worker;
   call.Finish(response);
 }
@@ -72,7 +70,7 @@ void Workers::UpdateWorker(workers::api::WorkersServiceBase::UpdateWorkerCall& c
       kUpdateWorkerQuery,
       position,
       id);
-  if (result.empty()) {
+  if (result.IsEmpty()) {
     grpc::Status status(grpc::StatusCode::INVALID_ARGUMENT, "Error while updating worker");
     call.FinishWithError(status);
   }
@@ -90,17 +88,15 @@ void Workers::DeleteWorker(workers::api::WorkersServiceBase::DeleteWorkerCall& c
       userver::storages::postgres::ClusterHostType::kMaster,
       kDeleteWorkerQuery,
       id);
-  if (result.empty()) {
+  if (result.IsEmpty()) {
     grpc::Status status(grpc::StatusCode::INVALID_ARGUMENT, "Error while deleting worker");
     call.FinishWithError(status);
   }
 
-  const auto& row = result.rows().front();
-  int worker_id = row["id"].As<int>();
-  std::string position = row["position"].As<std::string>();
+  std::string position = result.AsSingleRow<std::string>();;
 
   workers::api::Worker worker;
-  worker.set_id(worker_id);
+  worker.set_id(id);
   worker.set_position(position);
 
   workers::api::DeleteWorkerResponse response;
