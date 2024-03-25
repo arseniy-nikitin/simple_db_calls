@@ -1,46 +1,50 @@
 import pytest
 
-import handlers.hello_pb2 as hello_protos  # noqa: E402, E501
+import handlers.workers_pb2 as workers_protos  # noqa: E402, E501
+import handlers.workers_pb2_grpc as workers_services  # noqa: E402, E501
 
 # Start the tests via `make test-debug` or `make test-release`
 
-
+@pytest.mark.asyncio
 async def test_grpc_client(mock_grpc_server, grpc_service):
-    @mock_grpc_server('SayHello')
-    async def mock_say_hello(request, context):
-        assert request.name
-        return hello_protos.HelloResponse(
-            text=f'{request.name}!!',
+    @mock_grpc_server('CreateWorker')
+    async def mock_create_worker(request, context):
+        assert request.worker
+        return workers_protos.CreateWorkerResponse(
+            id=request.worker.id,
         )
 
-    request = hello_protos.HelloRequest(name='mock_userver')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hello, userver!!!\n'
-    assert mock_say_hello.times_called == 1
+    worker = workers_protos.Worker(id=1, position='Senior Latte Drinker')
+    request = workers_protos.CreateWorkerRequest(worker=worker)
+    response = await grpc_service.CreateWorker(request)
+    assert response.id == 1
+    assert mock_create_worker.times_called == 1
 
+@pytest.mark.asyncio
+async def test_get_worker(grpc_service):
+    request = workers_protos.GetWorkerRequest(id=1)
+    response = await grpc_service.GetWorker(request)
+    assert response.worker.id == 1
+    assert response.worker.position == 'Senior Latte Drinker'
 
-async def test_first_time_users(grpc_service):
-    request = hello_protos.HelloRequest(name='userver')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hello, userver!\n'
+@pytest.mark.asyncio
+async def test_update_worker(grpc_service):
+    worker = workers_protos.Worker(id=1, position='Junior Latte Drinker')
+    request = workers_protos.UpdateWorkerRequest(worker=worker)
+    response = await grpc_service.UpdateWorker(request)
+    assert response.id == 1
 
+@pytest.mark.asyncio
+async def test_delete_worker(grpc_service):
+    request = workers_protos.DeleteWorkerRequest(id=1)
+    response = await grpc_service.DeleteWorker(request)
+    assert response.worker.id == 1
+    assert response.worker.position == 'Junior Latte Drinker'
 
-async def test_db_updates(grpc_service):
-    request = hello_protos.HelloRequest(name='World')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hello, World!\n'
-
-    request = hello_protos.HelloRequest(name='World')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hi again, World!\n'
-
-    request = hello_protos.HelloRequest(name='World')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hi again, World!\n'
-
-
-@pytest.mark.pgsql('db_1', files=['initial_data.sql'])
+@pytest.mark.pgsql('db', files=['initial_data.sql'])
+@pytest.mark.asyncio
 async def test_db_initial_data(grpc_service):
-    request = hello_protos.HelloRequest(name='user-from-initial_data.sql')
-    response = await grpc_service.SayHello(request)
-    assert response.text == 'Hi again, user-from-initial_data.sql!\n'
+    request = workers_protos.GetWorkerRequest(id=1)
+    response = await grpc_service.GetWorker(request)
+    assert response.worker.id == 1
+    assert response.worker.position == 'Senior Latte Drinker'
