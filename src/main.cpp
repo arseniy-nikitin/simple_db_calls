@@ -7,8 +7,8 @@
 #include <userver/ugrpc/server/server_component.hpp>
 #include <userver/utils/daemon_run.hpp>
 
-#include "rofls.hpp"
-#include "rofls_client.hpp"
+#include "workers.hpp"
+#include "workers_client.hpp"
 
 int main(int argc, char* argv[]) {
   auto component_list =
@@ -20,8 +20,8 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::HttpClient>()
           .Append<userver::server::handlers::TestsControl>();
 
-  simple_db_calls::AppendRofls(component_list);
-  simple_db_calls::AppendRoflsClient(component_list);
+  simple_db_calls::AppendWorkers(component_list);
+  simple_db_calls::AppendWorkersClient(component_list);
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

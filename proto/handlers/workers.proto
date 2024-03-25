@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package workers.api;
+
+message Worker {
+	int32 id = 1;
+	string position = 2;
+}
+
+service WorkersService {
+	rpc CreateWorker(CreateWorkerRequest) returns(CreateWorkerResponse) {}
+	rpc GetWorker(GetWorkerRequest) returns(GetWorkerResponse) {}
+	rpc UpdateWorker(UpdateWorkerRequest) returns(UpdateWorkerResponse) {}
+	rpc DeleteWorker(DeleteWorkerRequest) returns(DeleteWorkerResponse) {}
+
+}
+
+message CreateWorkerRequest {
+	Worker worker = 1;
+}
+
+message CreateWorkerResponse {
+	int32 id = 1;
+}
+
+message GetWorkerRequest {
+	int32 id = 1;
+}
+
+message GetWorkerResponse {
+	Worker worker = 1;
+}
+
+message UpdateWorkerRequest {
+	Worker worker = 1;
+}
+
+message UpdateWorkerResponse {
+	int32 id = 1;
+}
+
+message DeleteWorkerRequest {
+	int32 id = 1;
+}
+
+message DeleteWorkerResponse {
+	Worker worker = 1;
+}

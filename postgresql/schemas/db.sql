@@ -1,8 +1,8 @@
-DROP SCHEMA IF EXISTS xd_schema CASCADE;
+DROP SCHEMA IF EXISTS workers_schema CASCADE;
 
-CREATE SCHEMA IF NOT EXISTS xd_schema;
+CREATE SCHEMA IF NOT EXISTS workers_schema;
 
-CREATE TABLE IG NOT EXISTS xd_schema.rofls (
+CREATE TABLE IF NOT EXISTS workers_schema.workers (
 	id SERIAL PRIMATY KEY,
-	razryvnaya VARCHAR(255) NOT NULL
+	position VARCHAR(55) NOT NULL
 );

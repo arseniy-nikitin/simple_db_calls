@@ -1,4 +1,4 @@
-INSERT INTO xd_schema.rofls(razryvnaya)
-VALUES ('POCHEMU PROD UPAL?! Lead eto ROFLS')
-ON CONFLICT (razryvnaya)
+INSERT INTO registry_schema.registry(position)
+VALUES ('Senior Latte Drinker')
+ON CONFLICT ()
 DO NOTHING;

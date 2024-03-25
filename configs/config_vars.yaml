@@ -8,6 +8,6 @@ is-testing: false
 server-port: 8080
 server-grpc-port: 8081
 
-rofls-endpoint: '[::1]:8081'
+workers-endpoint: '[::1]:8081'
 
 dbconnection: 'postgresql://simple_db_calls_user:password@localhost:5432/simple_db_calls_db'
