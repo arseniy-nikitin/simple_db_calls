@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/workers.cpp
     src/workers_client.hpp
     src/workers_client.cpp
+    src/workers_queries.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver-postgresql)
 
