@@ -9,26 +9,18 @@ UTEST(CreateWorker, Basic) {
   worker.set_id(1);
   worker.set_position("Senior Latte Drinker");
 
-  workers::api::CreateWorkerRequest request;
-  request.set_allocated_worker(&worker);
+  int32_t result = CreateWorker(worker);
 
-  workers::api::CreateWorkerResponse response;
-  CreateWorker(request, &response);
-
-  EXPECT_EQ(response.id(), 1);
+  EXPECT_EQ(result, 1);
 }
 
 UTEST(GetWorker, Basic) {
   using simple_db_calls::GetWorker;
 
-  workers::api::GetWorkerRequest request;
-  request.set_id(1);
+  workers::api::Worker result = GetWorker(1);
 
-  workers::api::GetWorkerResponse response;
-  GetWorker(request, &response);
-
-  EXPECT_EQ(response.worker().id(), 1);
-  EXPECT_EQ(response.worker().position(), "Senior Latte Drinker");
+  EXPECT_EQ(result.id(), 1);
+  EXPECT_EQ(result.position(), "Senior Latte Drinker");
 }
 
 UTEST(UpdateWorker, Basic) {
@@ -38,24 +30,16 @@ UTEST(UpdateWorker, Basic) {
   worker.set_id(1);
   worker.set_position("Junior Latte Drinker");
 
-  workers::api::UpdateWorkerRequest request;
-  request.set_allocated_worker(&worker);
+  int32_t result = UpdateWorker(worker);
 
-  workers::api::UpdateWorkerResponse response;
-  UpdateWorker(request, &response);
-
-  EXPECT_EQ(response.id(), 1);
+  EXPECT_EQ(result, 1);
 }
 
 UTEST(DeleteWorker, Basic) {
   using simple_db_calls::DeleteWorker;
 
-  workers::api::DeleteWorkerRequest request;
-  request.set_id(1);
+  workers::api::Worker result = DeleteWorker(1);
 
-  workers::api::DeleteWorkerResponse response;
-  DeleteWorker(request, &response);
-
-  EXPECT_EQ(response.worker().id(), 1);
-  EXPECT_EQ(response.worker().position(), "Junior Latte Drinker");
+  EXPECT_EQ(result.id(), 1);
+  EXPECT_EQ(result.position(), "Junior Latte Drinker");
 }
