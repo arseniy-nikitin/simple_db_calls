@@ -1,4 +1,4 @@
-#include "hello.hpp"
+#include "workers.hpp"
 
 #include <cstdint>   // for std::uint64_t
 #include <iterator>  // for std::size
@@ -7,18 +7,74 @@
 #include <benchmark/benchmark.h>
 #include <userver/engine/run_standalone.hpp>
 
-void HelloBenchmark(benchmark::State& state) {
+void CreateWorkerBenchmark(benchmark::State& state) {
   userver::engine::RunStandalone([&] {
-    constexpr std::string_view kNames[] = {"userver", "is", "awesome", "!"};
-    std::uint64_t i = 0;
+    workers::api::Worker worker;
+    worker.set_id(1);
+    worker.set_position("Senior Latte Drinker");
+
+    workers::api::CreateWorkerRequest request;
+    request.set_allocated_worker(&worker);
+
+    workers::api::CreateWorkerResponse response;
 
     for (auto _ : state) {
-      const auto name = kNames[i++ % std::size(kNames)];
-      auto result = simple_db_calls::SayHelloTo(
-          name, simple_db_calls::UserType::kFirstTime);
-      benchmark::DoNotOptimize(result);
+      simple_db_calls::CreateWorker(request, &response);
+      benchmark::DoNotOptimize(response);
     }
   });
 }
 
-BENCHMARK(HelloBenchmark);
+BENCHMARK(CreateWorkerBenchmark);
+
+void GetWorkerBenchmark(benchmark::State& state) {
+  userver::engine::RunStandalone([&] {
+    workers::api::GetWorkerRequest request;
+    request.set_id(1);
+
+    workers::api::GetWorkerResponse response;
+
+    for (auto _ : state) {
+      simple_db_calls::GetWorker(request, &response);
+      benchmark::DoNotOptimize(response);
+    }
+  });
+}
+
+BENCHMARK(GetWorkerBenchmark);
+
+void UpdateWorkerBenchmark(benchmark::State& state) {
+  userver::engine::RunStandalone([&] {
+    workers::api::Worker worker;
+    worker.set_id(1);
+    worker.set_position("Junior Latte Drinker");
+
+    workers::api::UpdateWorkerRequest request;
+    request.set_allocated_worker(&worker);
+
+    workers::api::UpdateWorkerResponse response;
+
+    for (auto _ : state) {
+      simple_db_calls::UpdateWorker(request, &response);
+      benchmark::DoNotOptimize(response);
+    }
+  });
+}
+
+BENCHMARK(UpdateWorkerBenchmark);
+
+void DeleteWorkerBenchmark(benchmark::State& state) {
+  userver::engine::RunStandalone([&] {
+    workers::api::DeleteWorkerRequest request;
+    request.set_id(1);
+
+    workers::api::DeleteWorkerResponse response;
+
+    for (auto _ : state) {
+      simple_db_calls::DeleteWorker(request, &response);
+      benchmark::DoNotOptimize(response);
+    }
+  });
+}
+
+BENCHMARK(DeleteWorkerBenchmark);
