@@ -20,7 +20,7 @@ namespace simple_db_calls {
 
   const userver::storages::postgres::Query kUpdateWorkerQuery {
       "UPDATE workers_schema.workers "
-      "SET workers.position = $1 "
+      "SET position = $1 "
       "WHERE workers.id = $2 "
       "RETURNING workers.id",
       userver::storages::postgres::Query::Name{"update_worker_query"}};
