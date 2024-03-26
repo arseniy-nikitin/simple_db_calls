@@ -21,21 +21,21 @@ async def test_grpc_client(mock_grpc_server, grpc_service):
     assert mock_create_worker.times_called == 1
 
 @pytest.mark.asyncio
-async def test_get_worker(grpc_service):
+async def test_get_worker(grpc_service, pgsql_local):
     request = workers_protos.GetWorkerRequest(id=1)
     response = await grpc_service.GetWorker(request)
     assert response.worker.id == 1
     assert response.worker.position == 'Senior Latte Drinker'
 
 @pytest.mark.asyncio
-async def test_update_worker(grpc_service):
+async def test_update_worker(grpc_service, pgsql_local):
     worker = workers_protos.Worker(id=1, position='Junior Latte Drinker')
     request = workers_protos.UpdateWorkerRequest(worker=worker)
     response = await grpc_service.UpdateWorker(request)
     assert response.id == 1
 
 @pytest.mark.asyncio
-async def test_delete_worker(grpc_service):
+async def test_delete_worker(grpc_service, pgsql_local):
     request = workers_protos.DeleteWorkerRequest(id=1)
     response = await grpc_service.DeleteWorker(request)
     assert response.worker.id == 1

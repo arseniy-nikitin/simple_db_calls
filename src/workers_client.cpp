@@ -8,7 +8,7 @@ namespace simple_db_calls {
 
 int32_t WorkersClient::CreateWorker(workers::api::Worker worker) {
   workers::api::CreateWorkerRequest request;
-  *request.mutable_worker() = worker;
+  *request.mutable_worker() = std::move(worker);
 
   auto context = std::make_unique<grpc::ClientContext>();                                                                                                                            
   context->set_deadline(
@@ -38,7 +38,7 @@ workers::api::Worker WorkersClient::GetWorker(int32_t id) {
 
 int32_t WorkersClient::UpdateWorker(workers::api::Worker worker) {
   workers::api::UpdateWorkerRequest request;
-  *request.mutable_worker() = worker;
+  *request.mutable_worker() = std::move(worker);
 
   auto context = std::make_unique<grpc::ClientContext>();                                                                                                                            
   context->set_deadline(
