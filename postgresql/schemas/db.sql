@@ -4,5 +4,5 @@ CREATE SCHEMA IF NOT EXISTS workers_schema;
 
 CREATE TABLE IF NOT EXISTS workers_schema.workers (
 	id SERIAL PRIMARY KEY,
-	position VARCHAR(55) NOT NULL
+	position VARCHAR(55) NOT NULL UNIQUE
 );
